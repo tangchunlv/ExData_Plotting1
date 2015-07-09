@@ -1,19 +1,13 @@
-aaa <- read.table('household_power_consumption.txt', na.strings = "?",sep=';', header=TRUE)
+house <- read.table('household_power_consumption.txt',sep=';', na.strings='?', header=TRUE)
 
-plotdata <- aaa[aaa$Date == "1/2/2007" | aaa$Date == "2/2/2007", ]
+plotdata <- house[house$Date=="1/2/2007" | house$Date=="2/2/2007", ]
 
+#put date and time together
 
+datatime <- paste(as.Date(plotdata$Date,format="%d/%m/%Y"), plotdata$Time)
+plotdata$Datetime <- as.POSIXct(datatime,tz="UTC")
 
-plot(plotdata$Time,
-     plotdata$Global_active_power,
-     xaxt="n",
-     type="l",
-     xlab="",
-     
-    
-     ylab="Global Active Power (kilowatts)"
-)
-dev.copy(png, filename="plot2.png", height=480, width=480)
-dev.off()
+plot(plotdata$Datetime, plotdata$Global_active_power, xlab="", ylab= "Global Active Power (kilowatts)", type = "l")
 
-
+dev.copy(png, filename="Plot2.PNG", width=480, height=480)
+dev.off
